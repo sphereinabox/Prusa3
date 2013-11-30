@@ -369,16 +369,16 @@ echo("bhmh", mounting_holes)
 		cylinder(r=block_bevel_r,h=wade_block_depth+2,$fn=40);
 	}
 
-	//carriage mountig holes
+	//carriage mounting holes
 	#translate([-24.5+64+4,-0.5,3]) {
 		translate([-50,0,0]) {
 			translate([0,0,(wade_block_depth+base_extra_depth)/2+4+layer_thickness]) cylinder(r=m3_diameter/2, h=wade_block_depth+base_extra_depth, center=true);
-			translate([0, 0, 1]) cylinder(r=m3_washer_diameter/2, h=10.1, center=true);
+			translate([0, 0, 4]) cylinder(r=m3_washer_diameter/2, h=15.1, center=true);
 		}
 		
 		translate([0,0,0]) {
 			translate([0,0,(wade_block_depth+base_extra_depth)/2+4+layer_thickness]) cylinder(r=m3_diameter/2, h=wade_block_depth+0.2+base_extra_depth, center=true);
-			translate([0, 0, 2]) cylinder(r=m3_washer_diameter/2, h=10.1, center=true);
+			translate([0, 0, 4]) cylinder(r=m3_washer_diameter/2, h=15.1, center=true);
 		}
 	}
 
@@ -473,13 +473,13 @@ echo("bhmh", mounting_holes)
 		{
 			rotate([0,0,180/8])
 			translate([0,0,-1])
-			cylinder(r=m4_diameter/2,h=wade_block_depth+6,$fn=8);	
+			cylinder(r=m3_diameter/2,h=wade_block_depth+6,$fn=8);	
 			rotate([0,0,180/6])
 			translate([0,0,wade_block_width-idler_nut_trap_depth])
-			cylinder(r=m4_nut_diameter/2,h=idler_nut_thickness,$fn=6);	
+			cylinder(r=m3_nut_diameter_horizontal/2,h=idler_nut_thickness,$fn=6);	
 
 			translate([0,10/2,wade_block_width-idler_nut_trap_depth+idler_nut_thickness/2])
-			cube([m4_nut_diameter*cos(30),10,idler_nut_thickness],center=true);
+			cube([m3_nut_diameter_horizontal*cos(30),10,idler_nut_thickness],center=true);
 		}
 	}
 }
