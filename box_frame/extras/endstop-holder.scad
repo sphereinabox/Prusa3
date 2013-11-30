@@ -19,7 +19,7 @@ include <../configuration.scad>
  * @using 1 m3nut
  * @using 2 m3washer
  */
-module endstop(shaft_radius){
+module endstop(shaft_radius, extension_offset=40, extension_offset_dir=1){
     shaft_diameter=shaft_radius*2;
     outer_diameter = shaft_diameter/2+3.3;
     screw_hole_spacing = 20;
@@ -34,7 +34,7 @@ module endstop(shaft_radius){
 
 		    translate([outer_diameter, outer_diameter, 0]) cylinder(h =10, r = outer_diameter, $fn = segments);
 		    translate([outer_diameter, 0, 0]) cube([15.5,outer_diameter*2,10]);
-		    translate([-30, 0, 0]) cube([40, 4, 10]);
+			translate([(extension_offset_dir > 0 ? 10-extension_offset : outer_diameter+14.5), 0, 0]) cube([extension_offset, 4, 10]);
 		    translate([17, 10+opening_size, 5]) rotate([90, 0, 0]) cylinder(h =5, r = 5.77, $fn = 6);
 	    }
 
@@ -50,14 +50,17 @@ module endstop(shaft_radius){
 
 	    translate([17, 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
 	    // Endstop holders
-	    translate([-5, 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
-	    translate([-(5+screw_hole_spacing), 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
-	    translate([-(5+screw_hole_spacing2), 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
-	
+		translate([40-extension_offset+(extension_offset_dir > 0 ? 0 : outer_diameter+15.5+10+extension_offset),0,0]) {
+			translate([-(5+screw_hole_spacing2), 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
+			translate([-(5+screw_hole_spacing), 17, 5]) rotate([90, 0, 0]) cylinder(h =20, r = m3_diameter/2, $fn = segments);
+		}
     }
 }
 
+// x
 endstop(bushing_xy[0]);
-translate([0,22,0]) endstop(bushing_xy[0]);
-translate([0,44,0]) endstop(bushing_z[0]);
+// y (10mm shaft, only lower pair of holes)
+translate([0,22,0]) endstop(5, 30);
+// z (oriented the other way, normal size shaft, extra long)
+translate([-30,46,0]) endstop(bushing_z[0], 40, -1);
 
