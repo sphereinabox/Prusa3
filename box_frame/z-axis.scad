@@ -32,7 +32,7 @@ module zmotorholder(thickness=(i_am_box == 0 ? 38 : 23), bottom_thickness=5){
 }
 
 
-module zrodholder(thickness=(i_am_box == 0 ? 14 : 15), bottom_thickness=5, ylen=44, xlen=34, zdelta=0){
+module zrodholder(thickness=(i_am_box == 0 ? 110 : 15), bottom_thickness=5, ylen=44, xlen=34, zdelta=50){
     holder_inner_r = 9;
     holder_inner_r2 = 2;
     difference(){
@@ -65,16 +65,24 @@ module zrodholder(thickness=(i_am_box == 0 ? 14 : 15), bottom_thickness=5, ylen=
                             cube_fillet([board_thickness + board_to_xz_distance + bushing_z[0], 5, thickness], radius=2, top = [0, 0, 0, thickness], $fn=99);
                     } else {
                         translate([-board_thickness/2, 0, 0])
-                            cube_fillet([board_thickness/2 + board_to_xz_distance + bushing_z[0], 5, thickness], radius=2, top = [0, 0, 0, thickness], $fn=99);
+                            cube_fillet([board_thickness/2 + board_to_xz_distance + bushing_z[0], 5, thickness], radius=2, top = [0, 0, 0, thickness-zdelta-10], $fn=99);
                     }
                     //smooth rod insert
                     translate([board_to_xz_distance - z_delta, 9, 0])
                         cylinder(h=bottom_thickness / 2, r=(bushing_z[0] + 5 * single_wall_width));
+						
+					// extra rib for tall Z rod holder
+					if (zdelta > 30) {
+						//translate([0,16.5+.5*8,0]) cube([10,8,60]);
+						translate([0,16.5+.5*8,0])
+							cube_fillet([14, 8, 75], radius=2, top = [0, 0, 0, 10], $fn=99);
+					}
+					
                 }
                 //smooth rod hole
                 translate([board_to_xz_distance - z_delta, 9, -1]) cylinder(h=board_thickness+20, r=bushing_z[0] + single_wall_width / 4);
                 //inside rouned corner
-                translate([0, 5, -1]) cylinder(r=0.8, h=100, $fn=8);
+                translate([0, 5, -1]) cylinder(r=0.8, h=150, $fn=8);
                 //side screw
                 //translate([-board_thickness/2, 0, thickness/2-1.5]) rotate([-90, 0, 0]) screw(h=30, r_head=4);
                 //front screws
@@ -97,6 +105,11 @@ module zrodholder(thickness=(i_am_box == 0 ? 14 : 15), bottom_thickness=5, ylen=
                     //side screw
                     translate([-board_thickness/2, -11, thickness/2]) rotate([-90, 0, 0]) plate_screw();
                 }
+				
+				if (zdelta > 30) {
+					// for rod holders, shorten rib to get out of way of bearing
+					translate([10,-1,15]) cube([21,10,40+zdelta]);
+				}
             }
         }
     }
