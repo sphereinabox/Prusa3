@@ -129,9 +129,15 @@ module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=i_am_box, poly=false, $fn
     }
 }
 
-module plate_screw(long=0) {
+module plate_screw(long=0, captive_nut=0) {
     if (i_am_box == 0) {
-        translate([0, 0, -long]) screw(head_drop=14 + long, h=30 + long, r_head=3.6, r=1.7, $fn=24, slant=false);
+		if (captive_nut == 0) {
+			// original (assumes screw goes into plate)
+			translate([0, 0, -long]) screw(head_drop=14 + long, h=30 + long, r_head=3.6, r=1.7, $fn=24, slant=false);
+		} else {
+			// Screws going downwards through plate into plastic piece with captive M3 nut
+			translate([0, 0, -long]) screw(head_drop=14 + long, h=30 + long, r_head=m3_nut_diameter_horizontal*.5, r=1.8, $fn=6, slant=false);
+		}
     } else {
         translate([0, 0, -2 - long]) screw(head_drop=14 + long, h=30 + long, r_head=4.5, r=2, $fn=24, slant=true);
     }
